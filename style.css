@@ -1,0 +1,93 @@
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    background-color: #000;
+}
+
+#wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 60px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.heading {
+    font-family: 'Kalam', cursive;
+    font-size: 28px;
+    margin-bottom: 40px;
+    color: #ccc;
+}
+
+.btn, .nav-link {
+    font-weight: 700;
+    font-size: 22px;
+    background: white;
+    color: black;
+    border: none;
+    padding: 16px 40px;
+    margin: 20px 10px 0 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+
+.btn:hover, .nav-link:hover {
+    background-color: #8919a0;
+    color: white;
+    transform: translateY(-5px);
+}
+
+.upload-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 50px 30px;
+    margin-top: 50px;
+    border-radius: 30px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+#navbar {
+    
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 30px;
+    gap: 30px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+#navbar a {
+    font-size: large;
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+}
+#navbar a:hover {
+    text-decoration:underline;
+    
+}
+footer {
+    margin-top: 70px;
+    font-size: 16px;
+    color: #aaa;
+}
