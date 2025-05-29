@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Huffman Compression - PDF to .huff</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Oswald:wght@300;400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- VANTA & THREE.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
+      font-family: 'Roboto', sans-serif;
+      background: #000;
+      color: #eee;
+    }
+    #wrapper {
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      padding: 0 20px 40px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    /* Navbar */
+    #navbar {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 15px 0;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    #navbar a {
+      color: #d6a9e0;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    #navbar a:hover {
+      color: #fff;
+    }
+
+    h1, h2 {
+      font-family: 'Kalam', cursive;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.3em;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-top: 20px;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .sub-heading {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #b29ed9;
+      margin-bottom: 30px;
+    }
+
+    /* Input & button styling */
+    input[type="file"] {
+      display: block;
+      margin: 15px auto;
+      padding: 10px;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      border: none;
+      background: #3a2f5a;
+      color: #eee;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+    }
+    input[type="file"]::-webkit-file-upload-button {
+      cursor: pointer;
+      background: #7c4dff;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      font-weight: 600;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    input[type="file"]::-webkit-file-upload-button:hover {
+      background: #a57dff;
+    }
+
+    button.btn {
+      background: #8919a0;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+      font-family: 'Oswald', sans-serif;
+      transition: background 0.3s;
+    }
+    button.btn:hover {
+      background: #b356d1;
+    }
+
+    /* Log area */
+    #log {
+      max-width: 700px;
+      margin: 30px auto 0;
+      background: rgba(255 255 255 / 0.1);
+      border-radius: 8px;
+      padding: 15px 20px;
+      font-family: monospace;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      min-height: 150px;
+      color: #d3c1f1;
+    }
+
+    /* Footer */
+    footer {
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 10px;
+      font-size: 0.9rem;
+      color: #8a72b2;
+    }
+  </style>
+
+  <script>
+    // Init Vanta.NET background once DOM loaded
+    document.addEventListener("DOMContentLoaded", function () {
+      VANTA.NET({
+        el: "#wrapper",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x8919a0,
+        backgroundColor: 0x000000,
+        maxDistance: 22.00
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="wrapper">
+    <nav id="navbar">
+      <a href="index.html">Home</a>
+      <a href="https://en.wikipedia.org/wiki/Huffman_coding" target="_blank" rel="noopener">Huffman Coding</a>
+      <a href="#">Profile</a>
+    </nav>
+
+    <h1>Huffman Compression</h1>
+    <p class="sub-heading">Compress your PDF file to a .huff file using Huffman encoding.</p>
+
+    <div class="upload-section">
+      <h2>Compress PDF File</h2>
+      <input type="file" id="fileInput" accept="application/pdf" />
+      <button id="compressBtn" class="btn"><i class="fa-solid fa-download"></i> Compress with Huffman</button>
+      <div id="log"></div>
+    </div>
+
+    <footer>&copy; 2025 FileCompressor. All rights reserved.</footer>
+  </div>
+
+  <script>
+  (() => {
+    const fileInput = document.getElementById('fileInput');
+    const compressBtn = document.getElementById('compressBtn');
+    const log = document.getElementById('log');
+
+    class Node {
+      constructor(char=null, freq=0, left=null, right=null) {
+        this.char = char;
+        this.freq = freq;
+        this.left = left;
+        this.right = right;
+      }
+    }
+
+    function buildFreqMap(data) {
+      const freqMap = new Map();
+      for (let b of data) freqMap.set(b, (freqMap.get(b) || 0) + 1);
+      return freqMap;
+    }
+
+    function buildTree(freqMap) {
+      const nodes = [];
+      for (const [char, freq] of freqMap) nodes.push(new Node(char, freq));
+      while (nodes.length > 1) {
+        nodes.sort((a,b) => a.freq - b.freq);
+        const left = nodes.shift();
+        const right = nodes.shift();
+        nodes.push(new Node(null, left.freq + right.freq, left, right));
+      }
+      return nodes[0];
+    }
+
+    function generateCodes(node, prefix="", codes={}) {
+      if (node.char !== null) {
+        codes[node.char] = prefix || "0";
+      } else {
+        generateCodes(node.left, prefix + "0", codes);
+        generateCodes(node.right, prefix + "1", codes);
+      }
+      return codes;
+    }
+
+    function encodeData(data, codes) {
+      let bits = "";
+      for (const b of data) bits += codes[b];
+      return bits;
+    }
+
+    function packBits(bitStr) {
+      const len = Math.ceil(bitStr.length / 8);
+      const bytes = new Uint8Array(len);
+      for (let i=0; i<bitStr.length; i++) {
+        if (bitStr[i] === '1') {
+          bytes[Math.floor(i/8)] |= 1 << (7 - (i % 8));
+        }
+      }
+      return bytes;
+    }
+
+    function serializeTree(node) {
+      if (!node) return "";
+      if (node.char !== null) {
+        return "1" + String.fromCharCode(node.char);
+      }
+      return "0" + serializeTree(node.left) + serializeTree(node.right);
+    }
+
+    function intToBytes(num) {
+      return new Uint8Array([
+        (num >> 24) & 0xFF,
+        (num >> 16) & 0xFF,
+        (num >> 8) & 0xFF,
+        (num) & 0xFF,
+      ]);
+    }
+
+    compressBtn.onclick = async () => {
+      const file = fileInput.files[0];
+      if (!file || file.type !== "application/pdf") {
+        alert("Please select a PDF file!");
+        return;
+      }
+
+      log.textContent = "Reading PDF file...";
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const data = new Uint8Array(arrayBuffer);
+        log.textContent += `\nPDF loaded, size: ${data.length} bytes\nBuilding Huffman tree...`;
+
+        const freqMap = buildFreqMap(data);
+        const tree = buildTree(freqMap);
+        const codes = generateCodes(tree);
+
+        log.textContent += "\nEncoding data...";
+        const bitStr = encodeData(data, codes);
+        const packedBytes = packBits(bitStr);
+
+        const serializedTree = serializeTree(tree);
+
+        // Build output file format:
+        // [4 bytes tree length][tree string][4 bytes original data length][4 bytes bit string length][packed encoded data]
+
+        const treeLengthBytes = intToBytes(serializedTree.length);
+        const originalLengthBytes = intToBytes(data.length);
+        const bitLengthBytes = intToBytes(bitStr.length);
+
+        const serializedTreeBytes = new Uint8Array(serializedTree.length);
+        for (let i=0; i<serializedTree.length; i++) {
+          serializedTreeBytes[i] = serializedTree.charCodeAt(i);
+        }
+
+        const totalLength = 4 + serializedTreeBytes.length + 4 + 4 + packedBytes.length;
+        const output = new Uint8Array(totalLength);
+
+        let offset = 0;
+        output.set(treeLengthBytes, offset); offset += 4;
+        output.set(serializedTreeBytes, offset); offset += serializedTreeBytes.length;
+        output.set(originalLengthBytes, offset); offset += 4;
+        output.set(bitLengthBytes, offset); offset += 4;
+        output.set(packedBytes, offset);
+
+        log.textContent += `\nCompression finished.\nOriginal size: ${data.length} bytes\nCompressed size: ${output.length} bytes\nSaving .huff file...`;
+
+        const blob = new Blob([output], {type: "application/octet-stream"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name.replace(/\.pdf$/i, "") + ".huff";
+        a.click();
+        URL.revokeObjectURL(url);
+
+        log.textContent += "\nFile saved as .huff";
+      } catch (err) {
+        log.textContent += `\nError: ${err.message}`;
+      }
+    };
+  })();
+  </script>
+</body>
+</html>
