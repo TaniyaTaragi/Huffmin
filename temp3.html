@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Huffman Decompression - .huff to PDF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Oswald:wght@300;400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- VANTA.NET & THREE.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Roboto', monospace, monospace;
+      background: #000;
+      color: #eee;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    #wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px 60px;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    nav#navbar {
+      margin-bottom: 25px;
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    nav#navbar a {
+      color: #379cb6;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    nav#navbar a:hover {
+      color: #a3d9f7;
+    }
+
+    h1 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 3rem;
+      margin-bottom: 0.3rem;
+      color: #379cb6;
+      text-shadow: 0 0 6px #379cb6;
+    }
+
+    .sub-heading {
+      font-family: 'Kalam', cursive;
+      font-weight: 400;
+      font-size: 1.25rem;
+      margin-bottom: 30px;
+      color: #a3d9f7;
+    }
+
+    h2 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500;
+      font-size: 2rem;
+      margin: 20px 0 15px;
+      color: #379cb6;
+      text-shadow: 0 0 6px #379cb6;
+    }
+
+    label {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #a3d9f7;
+      font-family: 'Kalam', cursive;
+    }
+
+    input[type="file"] {
+      border: 1px solid #379cb6;
+      border-radius: 6px;
+      background: #0b2d47;
+      color: #a3d9f7;
+      padding: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 260px;
+      margin-bottom: 20px;
+      transition: background 0.3s ease;
+    }
+    input[type="file"]:hover {
+      background: #174f79;
+    }
+
+    button.btn {
+      background-color: #379cb6;
+      border: none;
+      padding: 12px 22px;
+      font-size: 1.1rem;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      color: #000;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #379cb6;
+      transition: background-color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    button.btn:hover {
+      background-color: #62c2e1;
+      box-shadow: 0 0 20px #62c2e1;
+    }
+
+    #log {
+      margin-top: 30px;
+      max-width: 700px;
+      text-align: left;
+      background: rgba(55, 156, 182, 0.1);
+      padding: 15px 20px;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      color: #cce7ff;
+      box-shadow: 0 0 10px #379cb6 inset;
+      user-select: text;
+      min-height: 130px;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9rem;
+      color: #379cb6;
+      text-shadow: 0 0 3px #379cb6;
+      user-select: none;
+    }
+
+    a.nav-link {
+      margin-top: 20px;
+      color: #62c2e1;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-block;
+      text-shadow: 0 0 5px #379cb6;
+      transition: color 0.3s ease;
+    }
+    a.nav-link:hover {
+      color: #a3d9f7;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      VANTA.NET({
+        el: "#wrapper",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x379cb6,
+        backgroundColor: 0x000000,
+        maxDistance: 24.00
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <nav id="navbar">
+      <a href="index.html">Home</a>
+      <a href="https://en.wikipedia.org/wiki/Huffman_coding" target="_blank" rel="noopener noreferrer">HuffmanCoding</a>
+      <a href="#">Profile</a>
+    </nav>
+
+    <h1>Huffman Decompression</h1>
+    <p class="sub-heading">Recover your original PDF from the .huff compressed file.</p>
+
+    <a href="index.html" class="nav-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+
+    <div class="upload-section">
+      <h2>Decompress .huff Files to PDF</h2>
+      <label for="fileInput">Select a .huff file</label>
+      <input type="file" id="fileInput" accept=".huff,application/octet-stream" />
+      <br />
+      <button id="decompressBtn" class="btn"><i class="fa-solid fa-file-arrow-down"></i> Decompress Huffman File</button>
+      <pre id="log"></pre>
+    </div>
+
+    <footer>
+      &copy; 2025 FileCompressor. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const fileInput = document.getElementById('fileInput');
+      const decompressBtn = document.getElementById('decompressBtn');
+      const log = document.getElementById('log');
+
+      class Node {
+        constructor(char=null, freq=0, left=null, right=null) {
+          this.char = char;
+          this.freq = freq;
+          this.left = left;
+          this.right = right;
+        }
+      }
+
+      function bytesToInt(bytes, offset=0) {
+        return (bytes[offset] << 24) | (bytes[offset+1] << 16) | (bytes[offset+2] << 8) | bytes[offset+3];
+      }
+
+      function deserializeTree(str) {
+        let pos = 0;
+        function helper() {
+          if (pos >= str.length) return null;
+          const flag = str[pos++];
+          if (flag === '1') {
+            const char = str.charCodeAt(pos++);
+            return new Node(char, 0);
+          }
+          const left = helper();
+          const right = helper();
+          return new Node(null, 0, left, right);
+        }
+        return helper();
+      }
+
+      function bytesToBitString(bytes, bitLength) {
+        let bits = "";
+        for (let i=0; i<bytes.length; i++) {
+          for (let b=7; b>=0; b--) {
+            bits += (bytes[i] & (1 << b)) ? '1' : '0';
+          }
+        }
+        return bits.substring(0, bitLength);
+      }
+
+      function decodeData(bits, root, bitLength) {
+        const result = [];
+        let node = root;
+        for (let i=0; i<bitLength; i++) {
+          node = bits[i] === '0' ? node.left : node.right;
+          if (node.char !== null) {
+            result.push(node.char);
+            node = root;
+          }
+        }
+        return new Uint8Array(result);
+      }
+
+      decompressBtn.onclick = async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Select a .huff file to decompress");
+          return;
+        }
+        log.textContent = "Reading .huff file...";
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const data = new Uint8Array(arrayBuffer);
+
+          // Parse header
+          let offset = 0;
+          const treeLength = bytesToInt(data, offset);
+          offset += 4;
+
+          let treeStr = "";
+          for (let i=0; i<treeLength; i++) {
+            treeStr += String.fromCharCode(data[offset + i]);
+          }
+          offset += treeLength;
+
+          const originalLength = bytesToInt(data, offset);
+          offset += 4;
+
+          const bitStrLength = bytesToInt(data, offset);
+          offset += 4;
+
+          const packedBytes = data.slice(offset);
+
+          log.textContent += "\nDeserializing Huffman tree...";
+          const tree = deserializeTree(treeStr);
+
+          log.textContent += "\nConverting packed bytes to bit string...";
+          const bitStr = bytesToBitString(packedBytes, bitStrLength);
+
+          log.textContent += "\nDecoding data with Huffman tree...";
+          const originalBytes = decodeData(bitStr, tree, bitStrLength);
+
+          log.textContent += `\nDecompression complete!\nRecovered bytes: ${originalBytes.length}\nOpening PDF...`;
+
+          if (originalBytes.length !== originalLength) {
+            log.textContent += "\nWarning: original length mismatch!";
+          }
+
+          const pdfBlob = new Blob([originalBytes], {type: "application/pdf"});
+          const url = URL.createObjectURL(pdfBlob);
+          window.open(url);
+
+          log.textContent += "\nPDF opened in a new tab.";
+        } catch (e) {
+          log.textContent += "\nError during decompression: " + e.message;
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

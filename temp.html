@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Image Decompressor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Oswald:wght@300;400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      VANTA.NET({
+        el: "#wrapper",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x379cb6,
+        backgroundColor: 0x000000,
+        maxDistance: 24.00
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+     <nav id="navbar">
+             <a href="index.html">Home</a>
+             <a href="https://en.wikipedia.org/wiki/Huffman_coding">HuffmanCoding</a>
+             <a href="#">Profile</a>
+           </nav>
+    <h1>Image Decompression</h1>
+    <p class="sub-heading">Recover your original image from the .huff compressed file.</p>
+
+    <a href="index.html" class="nav-link">Back to Home</a>
+
+    <div class="upload-section">
+      <h2>Decompress .huff Files</h2>
+      <label>Select a .huff file</label>
+      <input type="file" id="huffInput" accept=".huff">
+      <button onclick="decompress()" class="btn"><i class="fa-solid fa-upload"></i> Decompress Image</button>
+      <p id="status"></p>
+    </div>
+
+    <footer>
+      &copy; 2025 FileCompressor. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    class Node {
+      constructor(char, freq, left = null, right = null) {
+        this.char = char;
+        this.freq = freq;
+        this.left = left;
+        this.right = right;
+      }
+    }
+
+    function buildHuffmanTree(freqMap) {
+      const nodes = Object.entries(freqMap).map(([char, freq]) => new Node(Number(char), freq));
+      while (nodes.length > 1) {
+        nodes.sort((a, b) => a.freq - b.freq);
+        const left = nodes.shift();
+        const right = nodes.shift();
+        nodes.push(new Node(null, left.freq + right.freq, left, right));
+      }
+      return nodes[0];
+    }
+
+    function decodeBits(bits, root, originalLength) {
+      const decoded = [];
+      let node = root;
+      for (let bit of bits) {
+        node = bit === "0" ? node.left : node.right;
+        if (node.char !== null) {
+          decoded.push(node.char);
+          node = root;
+          if (decoded.length === originalLength) break;
+        }
+      }
+      return new Uint8Array(decoded);
+    }
+
+    function bytesToBinary(byteArr) {
+      return Array.from(byteArr).map(b => b.toString(2).padStart(8, "0")).join("");
+    }
+
+    function decompress() {
+      const input = document.getElementById("huffInput").files[0];
+      if (!input) return alert("Select a .huff file.");
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const buffer = new Uint8Array(reader.result);
+        const metadataLength = new DataView(buffer.buffer).getUint32(0, true);
+        const metadataBytes = buffer.slice(4, 4 + metadataLength);
+        const metadata = JSON.parse(new TextDecoder().decode(metadataBytes));
+
+        const compressed = buffer.slice(4 + metadataLength);
+        const bitStr = bytesToBinary(compressed);
+
+        const tree = buildHuffmanTree(metadata.freqMap);
+        const decodedBytes = decodeBits(bitStr, tree, metadata.originalLength);
+
+        const blob = new Blob([decodedBytes], { type: metadata.mimeType });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "decompressed." + metadata.extension;
+        a.click();
+
+        document.getElementById("status").textContent = "Decompression complete.";
+      };
+
+      reader.readAsArrayBuffer(input);
+    }
+  </script>
+</body>
+</html>
