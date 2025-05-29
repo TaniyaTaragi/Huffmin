@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>File Compressor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Oswald:wght@300;400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      VANTA.NET({
+        el: "#wrapper",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x8919a0,
+        backgroundColor: 0x000000,
+        maxDistance: 22.00
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <nav id="navbar">
+      <a href="index.html">Home</a>
+      <a href="https://en.wikipedia.org/wiki/Huffman_coding">HuffmanCoding</a>
+      <a href="#">Profile</a>
+    </nav>
+    
+    <h1>File Compression</h1>
+    <p class="sub-heading">Easily reduce the file size of any document, image, or archive.</p>
+    <a href="index.html" class="nav-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+
+    <div class="upload-section">
+      <h2>Compress Any File</h2>
+      <form id="compress-form">
+        <label>Select a file (any type)</label>
+        <input type="file" id="fileInput" required />
+        
+       
+
+        <button type="submit" class="btn"><i class="fa-solid fa-download"></i> Compress File</button>
+      </form>
+      <div id="output-msg" class="sub-heading" style="margin-top: 10px;"></div>
+    </div>
+
+    <footer>
+      &copy; 2025 FileCompressor. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    class Node {
+      constructor(char, freq, left = null, right = null) {
+        this.char = char;
+        this.freq = freq;
+        this.left = left;
+        this.right = right;
+      }
+    }
+
+    function buildFrequencyMap(data) {
+      const freqMap = new Map();
+      for (let byte of data) {
+        freqMap.set(byte, (freqMap.get(byte) || 0) + 1);
+      }
+      return freqMap;
+    }
+
+    function buildHuffmanTree(freqMap) {
+      const nodes = Array.from(freqMap.entries()).map(([char, freq]) => new Node(char, freq));
+      while (nodes.length > 1) {
+        nodes.sort((a, b) => a.freq - b.freq);
+        const left = nodes.shift();
+        const right = nodes.shift();
+        nodes.push(new Node(null, left.freq + right.freq, left, right));
+      }
+      return nodes[0];
+    }
+
+    function generateCodes(node, prefix = "", map = {}) {
+      if (!node) return;
+      if (node.char !== null) map[node.char] = prefix;
+      generateCodes(node.left, prefix + "0", map);
+      generateCodes(node.right, prefix + "1", map);
+      return map;
+    }
+
+    function encodeData(data, codeMap) {
+      return data.map(byte => codeMap[byte]).join("");
+    }
+
+    function binaryToBytes(binStr) {
+      const padding = (8 - (binStr.length % 8)) % 8;
+      binStr = binStr.padEnd(binStr.length + padding, "0");
+
+      const bytes = new Uint8Array(binStr.length / 8);
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(binStr.slice(i * 8, i * 8 + 8), 2);
+      }
+      return { bytes, padding };
+    }
+
+    function serializeCodeMap(codeMap) {
+      return JSON.stringify(Object.fromEntries(Object.entries(codeMap).map(([k, v]) => [parseInt(k), v])));
+    }
+
+    document.getElementById("compress-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      const output = document.getElementById("output-msg");
+
+      if (!file) {
+        alert("Please select a file.");
+        return;
+      }
+
+     
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const rawData = new Uint8Array(reader.result);
+        const freqMap = buildFrequencyMap(rawData);
+        const huffmanTree = buildHuffmanTree(freqMap);
+        const codeMap = generateCodes(huffmanTree);
+        const encodedBits = encodeData(rawData, codeMap);
+        const { bytes, padding } = binaryToBytes(encodedBits);
+
+        const meta = { codeMap, padding };
+        const metaStr = JSON.stringify(meta);
+        const metaBytes = new TextEncoder().encode(metaStr);
+        const metaLength = new Uint32Array([metaBytes.length]);
+
+        const finalBuffer = new Uint8Array(4 + metaBytes.length + bytes.length);
+        finalBuffer.set(new Uint8Array(metaLength.buffer), 0);
+        finalBuffer.set(metaBytes, 4);
+        finalBuffer.set(bytes, 4 + metaBytes.length);
+
+        const blob = new Blob([finalBuffer], { type: "application/octet-stream" });
+        const downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = file.name + ".huff";
+        downloadLink.click();
+
+        output.textContent = "Compression complete! File downloaded as: " + downloadLink.download;
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  </script>
+
+
+
+</body>
+</html>
