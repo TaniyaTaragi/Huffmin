@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>About Us - File Compressor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Oswald:wght@300;400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="about-style.css" />
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      VANTA.NET({
+        el: "#wrapper",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x8919a0,
+        backgroundColor: 0x000000,
+        maxDistance: 22.00
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav id="navbar">
+      <a href="index.html">Home</a>
+      <a href="https://en.wikipedia.org/wiki/Huffman_coding" target="_blank">HuffmanCoding</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+
+
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <h1>About File Compressor</h1>
+      <p class="hero-subtitle">
+        A powerful, browser-based file compression tool using advanced Huffman Coding algorithms. 
+        Compress and decompress any file type with efficiency, privacy, and ease.
+      </p>
+    </div>
+
+    <!-- Mission Statement -->
+    <div class="mission-section">
+      <div class="card">
+        <h2>Our Mission</h2>
+        <p>
+          To provide a fast, secure, and accessible file compression solution that works entirely in your browser.
+          We believe in privacy-first technology that puts users in control of their data while delivering
+          professional-grade compression results.
+        </p>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-section">
+      <h2 class="section-title">Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fa-solid fa-file-archive feature-icon"></i>
+          <h3>Universal File Support</h3>
+          <p>Compress any file type - documents, archives, executables, and more. Our Huffman encoding works with all binary data.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-image feature-icon"></i>
+          <h3>Image Optimization</h3>
+          <p>Specialized image compression for PNG, JPG, and other formats while preserving quality and metadata.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-file-pdf feature-icon"></i>
+          <h3>PDF Compression</h3>
+          <p>Reduce PDF file sizes significantly while maintaining document integrity and readability.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-shield-halved feature-icon"></i>
+          <h3>Privacy First</h3>
+          <p>All processing happens in your browser. Your files never leave your device, ensuring complete privacy.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-bolt feature-icon"></i>
+          <h3>Lightning Fast</h3>
+          <p>Optimized algorithms deliver rapid compression and decompression without compromising quality.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fa-solid fa-globe feature-icon"></i>
+          <h3>No Installation</h3>
+          <p>Works directly in any modern web browser. No downloads, installations, or external software required.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technology Section -->
+    <div class="technology-section">
+      <div class="card">
+        <h2>Powered by Huffman Coding</h2>
+        <p class="tech-intro">
+          Our compression engine uses the proven Huffman Coding algorithm, a lossless data compression technique
+          that assigns variable-length codes to characters based on their frequency of occurrence.
+        </p>
+
+        <div class="tech-details">
+          <div class="tech-column">
+            <h3>How It Works</h3>
+            <ul>
+              <li>Analyzes file data to build frequency maps</li>
+              <li>Constructs optimal binary trees for encoding</li>
+              <li>Generates efficient compression codes</li>
+              <li>Preserves original data with perfect fidelity</li>
+            </ul>
+          </div>
+
+          <div class="tech-column">
+            <h3>Benefits</h3>
+            <ul>
+              <li>Optimal compression ratios</li>
+              <li>Lossless data preservation</li>
+              <li>Fast encoding and decoding</li>
+              <li>Industry-standard reliability</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Specs -->
+    <div class="specs-section">
+      <div class="card">
+        <h2>Technical Specifications</h2>
+        <div class="specs-grid">
+          <div class="spec-item">
+            <h4>File Formats</h4>
+            <div class="badges">
+              <span class="badge">Any Binary</span>
+              <span class="badge">Images</span>
+              <span class="badge">PDFs</span>
+            </div>
+          </div>
+
+          <div class="spec-item">
+            <h4>Output Format</h4>
+            <div class="badges">
+              <span class="badge">.huff</span>
+            </div>
+          </div>
+
+          <div class="spec-item">
+            <h4>Browser Support</h4>
+            <div class="badges">
+              <span class="badge">Chrome</span>
+              <span class="badge">Firefox</span>
+              <span class="badge">Safari</span>
+              <span class="badge">Edge</span>
+            </div>
+          </div>
+
+          <div class="spec-item">
+            <h4>Technology</h4>
+            <div class="badges">
+              <span class="badge">JavaScript</span>
+              <span class="badge">WebAssembly</span>
+              <span class="badge">HTML5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-section">
+      <div class="card">
+        <h2><i class="fa-solid fa-users"></i> Our Team</h2>
+        <p class="team-description">
+          Built by passionate developers who believe in open-source technology and user privacy. We're committed to
+          creating tools that empower users while respecting their data.
+        </p>
+
+        <div class="team-buttons">
+          <a href="https://github.com/TaniyaTaragi/Huffmin" class="btn secondary">
+            <i class="fa-brands fa-github"></i> View on GitHub
+          </a>
+          <a href="contact.html" class="btn secondary">
+            <i class="fa-solid fa-envelope"></i> Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <h2>Ready to Compress?</h2>
+      <p class="cta-description">
+        Start compressing your files today with our fast, secure, and privacy-focused compression tool.
+      </p>
+      <div class="cta-buttons">
+        <a href="file_compressor.html" class="btn primary">
+          <i class="fa-solid fa-file-archive"></i> Compress Files
+        </a>
+        <a href="image_compressor.html" class="btn secondary">
+          <i class="fa-solid fa-image"></i> Compress Images
+        </a>
+        <a href="pdf_compressor.html" class="btn secondary">
+          <i class="fa-solid fa-file-pdf"></i> Compress PDFs
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 FileCompressor. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>

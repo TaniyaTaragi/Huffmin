@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Contact Us - File Compressor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Oswald:wght@300;400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="contact-style.css" />
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      VANTA.NET({
+        el: "#wrapper",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x8919a0,
+        backgroundColor: 0x000000,
+        maxDistance: 22.00
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav id="navbar">
+      <a href="index.html">Home</a>
+      <a href="https://en.wikipedia.org/wiki/Huffman_coding" target="_blank">HuffmanCoding</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html" class="active">Contact Us</a>
+    </nav>
+
+    
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <h1>Contact Us</h1>
+      <p class="hero-subtitle">
+        Have questions about our compression tool? Need technical support? 
+        We'd love to hear from you and help with any inquiries.
+      </p>
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="contact-form-section">
+      <div class="form-container">
+        <h2><i class="fa-solid fa-envelope"></i> Send us a Message</h2>
+        <form id="contact-form" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">
+                <i class="fa-solid fa-user"></i> First Name *
+              </label>
+              <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName">
+                <i class="fa-solid fa-user"></i> Last Name *
+              </label>
+              <input type="text" id="lastName" name="lastName" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">
+              <i class="fa-solid fa-envelope"></i> Email Address *
+            </label>
+            <input type="email" id="email" name="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">
+              <i class="fa-solid fa-tag"></i> Subject *
+            </label>
+            <select id="subject" name="subject" required>
+              <option value="">Select a topic...</option>
+              <option value="technical-support">Technical Support</option>
+              <option value="bug-report">Bug Report</option>
+              <option value="feature-request">Feature Request</option>
+              <option value="general-inquiry">General Inquiry</option>
+              <option value="partnership">Partnership</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">
+              <i class="fa-solid fa-message"></i> Message *
+            </label>
+            <textarea id="message" name="message" rows="6" placeholder="Tell us how we can help you..." required></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="newsletter" name="newsletter">
+              <span class="checkmark"></span>
+              Subscribe to our newsletter for updates and compression tips
+            </label>
+          </div>
+
+          <button type="submit" class="btn primary submit-btn">
+            <i class="fa-solid fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+
+        <div id="form-status" class="form-status"></div>
+      </div>
+    </div>
+
+    <!-- Contact Info Section -->
+    <div class="contact-info-section">
+      <div class="info-grid">
+        <div class="info-card">
+          <i class="fa-solid fa-envelope info-icon"></i>
+          <h3>Email Support</h3>
+          <p>Get help with technical issues</p>
+          <a href="mailto:support@filecompressor.com" class="contact-link">
+            support@filecompressor.com
+          </a>
+        </div>
+
+        <div class="info-card">
+          <i class="fa-brands fa-github info-icon"></i>
+          <h3>Open Source</h3>
+          <p>Contribute to our project</p>
+          <a href="#" class="contact-link" target="_blank">
+            View on GitHub
+          </a>
+        </div>
+
+        <div class="info-card">
+          <i class="fa-solid fa-bug info-icon"></i>
+          <h3>Bug Reports</h3>
+          <p>Report issues and bugs</p>
+          <a href="#" class="contact-link" target="_blank">
+            Submit Issue
+          </a>
+        </div>
+
+        <div class="info-card">
+          <i class="fa-solid fa-lightbulb info-icon"></i>
+          <h3>Feature Requests</h3>
+          <p>Suggest new features</p>
+          <a href="#" class="contact-link" target="_blank">
+            Request Feature
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+      <div class="faq-container">
+        <h2><i class="fa-solid fa-question-circle"></i> Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>Is my data safe when using File Compressor?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>All compression and decompression happens entirely in your browser. Your files never leave your device or get uploaded to any server, ensuring complete privacy and security.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>What file types are supported?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Our tool supports any file type including documents, images (PNG, JPG, GIF), PDFs, archives, executables, and more. The Huffman encoding algorithm works with all binary data.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>How much compression can I expect?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Compression ratios vary depending on the file type and content. Text files typically compress by 40-60%, while already compressed files (like JPEGs) may see smaller reductions. Our Huffman algorithm ensures optimal compression for each file.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>Can I decompress .huff files on other devices?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Yes! You can use our decompression tools on any device with a modern web browser. Simply visit our website and use the appropriate decompressor for your file type.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span>Is there a file size limit?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>The limit depends on your browser's memory capacity. Most modern browsers can handle files up to several hundred MB. For very large files, we recommend using smaller chunks or desktop compression tools.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Links -->
+    <div class="social-section">
+      <h2>Follow Us</h2>
+      <div class="social-links">
+        <a href="#" class="social-link" target="_blank">
+          <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="#" class="social-link" target="_blank">
+          <i class="fa-brands fa-twitter"></i>
+        </a>
+        <a href="#" class="social-link" target="_blank">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="#" class="social-link" target="_blank">
+          <i class="fa-brands fa-discord"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 FileCompressor. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    // Form submission handler
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formStatus = document.getElementById('form-status');
+      const submitBtn = document.querySelector('.submit-btn');
+      
+      // Show loading state
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+      submitBtn.disabled = true;
+      
+      // Simulate form submission (replace with actual form handling)
+      setTimeout(() => {
+        formStatus.innerHTML = '<div class="success-message"><i class="fa-solid fa-check-circle"></i> Thank you! Your message has been sent successfully. We\'ll get back to you soon.</div>';
+        formStatus.style.display = 'block';
+        
+        // Reset form
+        this.reset();
+        
+        // Reset button
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+        submitBtn.disabled = false;
+        
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          formStatus.style.display = 'none';
+        }, 5000);
+      }, 2000);
+    });
+
+    // FAQ toggle function
+    function toggleFAQ(element) {
+      const faqItem = element.parentElement;
+      const answer = faqItem.querySelector('.faq-answer');
+      const icon = element.querySelector('i');
+      
+      faqItem.classList.toggle('active');
+      
+      if (faqItem.classList.contains('active')) {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        answer.style.maxHeight = '0';
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Form validation
+    const inputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+    inputs.forEach(input => {
+      input.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+          this.classList.add('error');
+        } else {
+          this.classList.remove('error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
